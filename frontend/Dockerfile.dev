@@ -1,0 +1,15 @@
+FROM node:15.5.0-alpine3.12
+
+WORKDIR /app/frontend
+
+ENV PATH /app/frontend/node_modules/.bin:$PATH
+
+COPY package.json ./
+COPY package-lock.json ./
+
+RUN npm install
+RUN npm install react-scripts -g
+
+COPY . ./
+
+CMD ["npm", "start"]

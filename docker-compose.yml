@@ -1,18 +1,35 @@
-version: '2'
+version: '3.8'
 
 services: 
-  app:
-    build: .
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
     volumes: 
-      - ./:/usr/app
+      - ./backend:/app/backend
     ports:
-      - 8080:8080
+      - 8081:8081
 
   db:
+    container_name: "baza_podataka"
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
     ports:
       - 3306:3306
+  
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes: 
+      - ./frontend:/app/frontend
+      - ./frontend/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
