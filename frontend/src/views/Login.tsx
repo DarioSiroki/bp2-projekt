@@ -1,6 +1,8 @@
 import { Form, Input, Button, Checkbox, Typography, Layout } from "antd";
 import { Row, Col } from "antd";
 import ApiWrapper from "../ApiWrapper";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const layout = {
   wrapperCol: { span: 8 },
@@ -13,21 +15,26 @@ const { Title } = Typography;
 const { Content } = Layout;
 
 const Login = () => {
-  const onFinish = async(values: any) => {
-    console.log("Success:", values);
+  const [key, setKey] = useState(window.localStorage.getItem("key"));
+  const history = useHistory();
+
+  useEffect(() => {
+    if (key != null) {
+      history.push("/dashboard");
+    }
+  });
+
+  const onSubmit = async (values: any) => {
     const result = await ApiWrapper.post("/users/login", {
       email: values.email,
-      password: values.password
-    })
-    console.log(result)
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+      lozinka: values.password,
+    });
+    window.localStorage.setItem("key", result.data.token);
+    setKey(result.data.token);
   };
 
   return (
-    <Row >
+    <Row>
       <Col span={4}></Col>
       <Col span={16}>
         <Layout>
@@ -37,8 +44,7 @@ const Login = () => {
               {...layout}
               name="basic"
               initialValues={{ remember: true }}
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
+              onFinish={onSubmit}
             >
               <Form.Item
                 label="Email"

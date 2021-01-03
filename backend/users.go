@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -13,10 +12,9 @@ func create_user(c *gin.Context) {
 	c.BindJSON(&k)
 	res, err := bcrypt.GenerateFromPassword([]byte(k.Lozinka), bcrypt.DefaultCost)
 	k.Lozinka = string(res)
-	fmt.Println(k.Lozinka)
 	db := db_cursor()
-	_, err = db.Query(fmt.Sprintf("INSERT INTO korisnik(ime, prezime, nadimak, email, lozinka, slika_url) VALUES('%s', '%s', '%s', '%s', '%s', '%s')",
-		k.Ime, k.Prezime, k.Nadimak, k.Email, k.Lozinka, k.SlikaUrl))
+	_, err = db.Query("INSERT INTO korisnik(ime, prezime, nadimak, email, lozinka, slika_url) VALUES(?, ?, ?, ?, ?, ?)",
+		k.Ime, k.Prezime, k.Nadimak, k.Email, k.Lozinka, k.SlikaUrl)
 	if err != nil {
 		log.Panic(err)
 		c.JSON(500, "Internal server error")

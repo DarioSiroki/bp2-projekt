@@ -13,31 +13,32 @@ const { Title } = Typography;
 const { Content } = Layout;
 
 const Login = () => {
-  const onFinish = async(values: any) => {
-      const {ime, prezime, nadimak, email, lozinka} = values;
+  const onSubmit = async (values: any) => {
+    const { ime, prezime, nadimak, email, lozinka } = values;
     console.log("Success:", values);
-    const result = await ApiWrapper.post("users/register", {ime, prezime, nadimak, email, lozinka})
-    console.log(result)
-  };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+    await ApiWrapper.post("users/register", {
+      ime,
+      prezime,
+      nadimak,
+      email,
+      lozinka,
+    });
+    const result = await ApiWrapper.post("/users/login", {
+      email,
+      password: lozinka,
+    });
+    console.log(result.data);
   };
 
   return (
-    <Row >
+    <Row>
       <Col span={4}></Col>
       <Col span={16}>
         <Layout>
           <Content style={{ margin: "24px 16px 0" }}>
             <Title> REGISTER </Title>
-            <Form
-              {...layout}
-              name="basic"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-                <Form.Item
+            <Form {...layout} name="basic" onFinish={onSubmit}>
+              <Form.Item
                 label="Name"
                 name="ime"
                 rules={[
@@ -91,7 +92,7 @@ const Login = () => {
               </Form.Item>
             </Form>
             <p>
-              Already have an account? <a href="/login">Login</a>{" "}
+              Already have an account? <a href="/">Login</a>{" "}
             </p>
           </Content>
         </Layout>
