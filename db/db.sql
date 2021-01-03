@@ -116,7 +116,7 @@ CREATE TABLE `korisnik` (
   `nadimak` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
   `lozinka` varchar(72) NOT NULL,
-  `slika_url` varchar(45) NOT NULL,
+  `slika_url` varchar(200) NOT NULL,
   `kreirano` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`korisnik_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -142,7 +142,7 @@ DROP TABLE IF EXISTS `organizacija`;
 CREATE TABLE `organizacija` (
   `organizacija_id` int NOT NULL AUTO_INCREMENT,
   `naziv` varchar(45) NOT NULL,
-  `slika_url` varchar(45) NOT NULL,
+  `slika_url` varchar(200) NOT NULL,
   `kreirano` datetime DEFAULT CURRENT_TIMESTAMP,
   `kreator_id` int NOT NULL,
   PRIMARY KEY (`organizacija_id`),

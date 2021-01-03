@@ -1,6 +1,7 @@
 import { Form, Input, Button, Checkbox, Typography, Layout } from "antd";
 import { Row, Col } from "antd";
 import ApiWrapper from "../ApiWrapper";
+import { useHistory } from "react-router-dom";
 
 const layout = {
   wrapperCol: { span: 8 },
@@ -13,6 +14,7 @@ const { Title } = Typography;
 const { Content } = Layout;
 
 const Login = () => {
+  const history = useHistory();
   const onSubmit = async (values: any) => {
     const { ime, prezime, nadimak, email, lozinka } = values;
     console.log("Success:", values);
@@ -25,9 +27,10 @@ const Login = () => {
     });
     const result = await ApiWrapper.post("/users/login", {
       email,
-      password: lozinka,
+      lozinka,
     });
-    console.log(result.data);
+    window.localStorage.setItem("key", result.data.token);
+    history.push("/dashboard");
   };
 
   return (
