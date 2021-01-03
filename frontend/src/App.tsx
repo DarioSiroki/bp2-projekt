@@ -1,14 +1,19 @@
-import './App.css';
+import "./App.css";
 import Login from "./views/Login";
+import Register from "./views/Register";
 import PageLoading from "./components/PageLoading";
-// <PageLoading />
-
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    <Router>
+      <Route exact path="/login">
         <Login />
-    </div>
+      </Route>
+      <Route exact path="/register">
+        <Register />
+      </Route>
+    </Router>
   );
 }
 

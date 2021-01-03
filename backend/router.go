@@ -11,7 +11,26 @@ import (
 
 var identityKey = "korisnik_id"
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			fmt.Println("abort")
+			c.AbortWithStatus(204)
+			return
+		}
+		fmt.Println("Going next")
+
+		c.Next()
+	}
+}
+
 func initRoutes(r *gin.Engine) {
+	r.Use(CORSMiddleware())
 
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",

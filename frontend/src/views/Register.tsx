@@ -14,11 +14,9 @@ const { Content } = Layout;
 
 const Login = () => {
   const onFinish = async(values: any) => {
+      const {ime, prezime, nadimak, email, lozinka} = values;
     console.log("Success:", values);
-    const result = await ApiWrapper.post("/users/login", {
-      email: values.email,
-      password: values.password
-    })
+    const result = await ApiWrapper.post("users/register", {ime, prezime, nadimak, email, lozinka})
     console.log(result)
   };
 
@@ -32,14 +30,40 @@ const Login = () => {
       <Col span={16}>
         <Layout>
           <Content style={{ margin: "24px 16px 0" }}>
-            <Title> LOGIN </Title>
+            <Title> REGISTER </Title>
             <Form
               {...layout}
               name="basic"
-              initialValues={{ remember: true }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
+                <Form.Item
+                label="Name"
+                name="ime"
+                rules={[
+                  { required: true, message: "Please input your email!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Surname"
+                name="prezime"
+                rules={[
+                  { required: true, message: "Please input your email!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Nickname"
+                name="nadimak"
+                rules={[
+                  { required: true, message: "Please input your email!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
               <Form.Item
                 label="Email"
                 name="email"
@@ -52,20 +76,12 @@ const Login = () => {
 
               <Form.Item
                 label="Password"
-                name="password"
+                name="lozinka"
                 rules={[
                   { required: true, message: "Please input your password!" },
                 ]}
               >
                 <Input.Password />
-              </Form.Item>
-
-              <Form.Item
-                {...tailLayout}
-                name="remember"
-                valuePropName="checked"
-              >
-                <Checkbox>Remember me</Checkbox>
               </Form.Item>
 
               <Form.Item {...tailLayout}>
@@ -75,7 +91,7 @@ const Login = () => {
               </Form.Item>
             </Form>
             <p>
-              Not a member? <a href="/register">Register</a>{" "}
+              Already have an account? <a href="/login">Login</a>{" "}
             </p>
           </Content>
         </Layout>
