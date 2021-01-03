@@ -115,7 +115,7 @@ CREATE TABLE `korisnik` (
   `prezime` varchar(45) NOT NULL,
   `nadimak` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `lozinka` varchar(45) NOT NULL,
+  `lozinka` varchar(72) NOT NULL,
   `slika_url` varchar(45) NOT NULL,
   `kreirano` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`korisnik_id`)

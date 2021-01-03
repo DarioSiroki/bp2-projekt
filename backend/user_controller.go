@@ -1,10 +1,10 @@
-package controllers
+package main
 
 import (
 	jwt "github.com/dgrijalva/jwt-go"
-	"fmt"
 )
 
-func generateJWT() (string, error) {
+func generateJWT() *jwt.Token {
 	token := jwt.New(jwt.SigningMethodHS256)
+	return token
 }
