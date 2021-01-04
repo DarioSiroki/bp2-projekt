@@ -1,33 +1,36 @@
 import { Layout, Breadcrumb, Menu } from "antd";
 import ApiWrapper from "../ApiWrapper";
 import { useState, useEffect } from "react";
-import OrganizationsList from "../components/OrganizationList";
-import AddOrganization from "../components/AddOrganization";
-import { IOrganization } from "../interfaces/db";
+import ProjectList from "../components/ProjectList";
+import AddProject from "../components/AddProject";
+import { IProject } from "../interfaces/db";
 import TaskManagerHeader from "../components/TaskManagerHeader";
 import { UnorderedListOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 const { Content } = Layout;
 
-const Dashboard = () => {
-  const [organizations, setOrganizations] = useState<IOrganization[]>([]);
+const Organization = () => {
+  const organizationId = window.location.pathname.split("/").pop() as string;
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   useEffect(() => {
-    ApiWrapper.get("/organizations/list").then(({ data }) => {
+    ApiWrapper.post("/projects/list", {
+      organizacija_id: organizationId,
+    }).then(({ data }) => {
       if (data !== null) {
-        setOrganizations(data as IOrganization[]);
+        setProjects(data as IProject[]);
         if (data !== null && data.length > 0) {
           setSelectedKeys(["list"]);
         } else {
           setSelectedKeys(["add"]);
         }
       } else {
-        setOrganizations([]);
+        setProjects([]);
         setSelectedKeys(["add"]);
       }
     });
-  }, []);
+  }, [organizationId]);
 
   return (
     <Layout>
@@ -35,7 +38,10 @@ const Dashboard = () => {
       <Layout>
         <Layout style={{ padding: "0 24px 24px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/dashboard">Dashboard</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Organization</Breadcrumb.Item>
           </Breadcrumb>
           <Content
             className="site-layout-background"
@@ -49,17 +55,17 @@ const Dashboard = () => {
             <Menu mode="horizontal" selectedKeys={selectedKeys}>
               <Menu.Item key="list" onClick={() => setSelectedKeys(["list"])}>
                 <UnorderedListOutlined />
-                My Organizations
+                My Projects
               </Menu.Item>
               <Menu.Item key="add" onClick={() => setSelectedKeys(["add"])}>
                 <PlusCircleOutlined />
-                Add Organization
+                Add Project
               </Menu.Item>
             </Menu>
             {selectedKeys.includes("list") ? (
-              <OrganizationsList list={organizations} />
+              <ProjectList list={projects} />
             ) : (
-              <AddOrganization />
+              <AddProject organizationId={organizationId} />
             )}
           </Content>
         </Layout>
@@ -68,4 +74,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Organization;

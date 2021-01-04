@@ -119,6 +119,11 @@ func initRoutes(r *gin.Engine) {
 	r.POST("/organizations/delete", authMiddleware.MiddlewareFunc(), delete_organization)
 	r.POST("/organizations/update", authMiddleware.MiddlewareFunc(), update_organization)
 
+	r.POST("/projects/list", authMiddleware.MiddlewareFunc(), get_projects)
+	r.POST("/projects/create", authMiddleware.MiddlewareFunc(), create_project)
+	r.POST("/projects/delete", authMiddleware.MiddlewareFunc(), delete_project)
+	r.POST("/projects/update", authMiddleware.MiddlewareFunc(), update_project)
+
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
 		claims := jwt.ExtractClaims(c)
 		fmt.Printf("NoRoute claims: %#v\n", claims)

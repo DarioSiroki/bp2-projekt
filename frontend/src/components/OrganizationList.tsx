@@ -7,6 +7,7 @@ import {
 import ApiWrapper from "../ApiWrapper";
 import { IOrganization } from "../interfaces/db";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const { Meta } = Card;
 
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const OrganizationsList = (props: Props) => {
+  const history = useHistory();
   const [visible, setVisible] = useState(false);
   const [currentOrganization, setCurrentOrganization] = useState("");
   const [newName, setNewName] = useState("");
@@ -71,7 +73,12 @@ const OrganizationsList = (props: Props) => {
                 key="setting"
                 onClick={() => deleteHandler(org.organizacija_id)}
               />,
-              <RightCircleTwoTone key="ellipsis" />,
+              <RightCircleTwoTone
+                key="ellipsis"
+                onClick={() =>
+                  history.push(`/dashboard/${org.organizacija_id}`)
+                }
+              />,
             ]}
             cover={<img alt="example" src={org.slika_url} />}
           >

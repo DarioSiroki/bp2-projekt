@@ -34,3 +34,19 @@ type Organizacije struct {
 func (o *Organizacije) AddItem(item Organizacija) {
 	o.Items = append(o.Items, item)
 }
+
+type Projekt struct {
+	ProjektId      string `json:"projekt_id"`
+	Naziv          string `json:"naziv"`
+	Opis           string `json:"opis"`
+	OrganizacijaId string `json:"organizacija_id"`
+	KreatorId      string `json:"kreator_id"`
+}
+
+type Projekti struct {
+	Items []Projekt
+}
+
+func (o *Projekti) AddItem(item Projekt) {
+	o.Items = append(o.Items, item)
+}
