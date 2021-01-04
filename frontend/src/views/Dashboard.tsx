@@ -15,10 +15,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     ApiWrapper.get("/organizations/list").then(({ data }) => {
-      setOrganizations(data as IOrganization[]);
-      if (data.length > 0) {
-        setSelectedKeys(["list"]);
+      if (data !== null) {
+        setOrganizations(data as IOrganization[]);
+        if (data !== null && data.length > 0) {
+          setSelectedKeys(["list"]);
+        } else {
+          setSelectedKeys(["add"]);
+        }
       } else {
+        setOrganizations([]);
         setSelectedKeys(["add"]);
       }
     });
