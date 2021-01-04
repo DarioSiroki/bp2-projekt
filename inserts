@@ -1,0 +1,8 @@
+INSERT INTO task_manager.prioritet (naziv) VALUES("visoki");
+INSERT INTO task_manager.prioritet (naziv) VALUES("srednji");
+INSERT INTO task_manager.prioritet (naziv) VALUES("nizak");
+INSERT INTO task_manager.status (naziv, opis) VALUES ("Na čekanju", "Još nitko nije započeo rad na zadatku.");
+INSERT INTO task_manager.status (naziv, opis) VALUES ("U tijeku", "Zadatak je u tijeku izvršavanja.");
+INSERT INTO task_manager.status (naziv, opis) VALUES ("Završen", "Zadatak je završen.");
+INSERT INTO task_manager.privilegija(naziv, opis) VALUES("admin", "Admin");
+INSERT INTO task_manager.privilegija(naziv, opis) VALUES("create_task", "Create tasks");

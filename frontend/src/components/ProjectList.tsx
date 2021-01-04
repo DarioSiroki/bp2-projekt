@@ -80,7 +80,9 @@ const ProjectList = (props: Props) => {
               <RightCircleTwoTone
                 key="ellipsis"
                 onClick={() =>
-                  history.push(`/dashboard/${project.organizacija_id}`)
+                  history.push(
+                    `/dashboard/${project.organizacija_id}/${project.projekt_id}`
+                  )
                 }
               />,
             ]}

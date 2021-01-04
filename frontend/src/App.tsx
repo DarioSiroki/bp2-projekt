@@ -3,6 +3,7 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Dashboard from "./views/Dashboard";
 import Organization from "./views/Organization";
+import Project from "./views/Project";
 // import PageLoading from "./components/PageLoading";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
@@ -20,6 +21,9 @@ function App() {
       </Route>
       <Route exact path="/dashboard/:organizationId">
         <Organization />
+      </Route>
+      <Route exact path="/dashboard/:organizationId/:projectId">
+        <Project />
       </Route>
     </Router>
   );

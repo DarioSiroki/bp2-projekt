@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +26,6 @@ func get_projects(c *gin.Context) {
 	var p Projekt
 	c.BindJSON(&p)
 
-	fmt.Println("orgid:", p.OrganizacijaId)
 	db := db_cursor()
 	results, err := db.Query("SELECT projekt_id, naziv, opis, organizacija_id, kreator_id FROM projekt WHERE organizacija_id=?", p.OrganizacijaId)
 	if err != nil {

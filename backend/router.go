@@ -110,8 +110,9 @@ func initRoutes(r *gin.Engine) {
 		fmt.Println("authMiddleware.MiddlewareInit() Error:" + errInit.Error())
 	}
 
-	r.GET("/users/list", get_users)
+	r.POST("/users/list", get_users)
 	r.POST("/users/register", create_user)
+	r.POST("/users/registerFromMember", authMiddleware.MiddlewareFunc(), create_by_member)
 	r.POST("/users/login", authMiddleware.LoginHandler)
 
 	r.GET("/organizations/list", authMiddleware.MiddlewareFunc(), get_organizations)
@@ -123,6 +124,15 @@ func initRoutes(r *gin.Engine) {
 	r.POST("/projects/create", authMiddleware.MiddlewareFunc(), create_project)
 	r.POST("/projects/delete", authMiddleware.MiddlewareFunc(), delete_project)
 	r.POST("/projects/update", authMiddleware.MiddlewareFunc(), update_project)
+
+	r.POST("/tasks/list", authMiddleware.MiddlewareFunc(), get_tasks)
+	r.POST("/tasks/create", authMiddleware.MiddlewareFunc(), create_task)
+	r.POST("/tasks/delete", authMiddleware.MiddlewareFunc(), delete_task)
+	r.POST("/tasks/update", authMiddleware.MiddlewareFunc(), update_task)
+
+	r.GET("/statuses", authMiddleware.MiddlewareFunc(), get_statuses)
+	r.GET("/priorities", authMiddleware.MiddlewareFunc(), get_priorities)
+	r.GET("/permissions", authMiddleware.MiddlewareFunc(), get_permissions)
 
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {
 		claims := jwt.ExtractClaims(c)

@@ -1,37 +1,36 @@
 import { Layout, Breadcrumb, Menu } from "antd";
 import ApiWrapper from "../ApiWrapper";
 import { useState, useEffect } from "react";
-import ProjectList from "../components/ProjectList";
-import AddProject from "../components/AddProject";
-import { IProject } from "../interfaces/db";
+import TaskList from "../components/TaskList";
+import AddTask from "../components/AddTask";
+import { ITask } from "../interfaces/db";
 import TaskManagerHeader from "../components/TaskManagerHeader";
 import { UnorderedListOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import AddUsers from "../components/AddUsers";
-
 const { Content } = Layout;
 
-const Organization = () => {
-  const organizationId = window.location.pathname.split("/").pop() as string;
-  const [projects, setProjects] = useState<IProject[]>([]);
+const Tasks = () => {
+  const organizationId = window.location.pathname.split("/")[2] as string;
+  const projectId = window.location.pathname.split("/")[3] as string;
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   useEffect(() => {
-    ApiWrapper.post("/projects/list", {
-      organizacija_id: organizationId,
+    ApiWrapper.post("tasks/list", {
+      projekt_id: projectId,
     }).then(({ data }) => {
       if (data !== null) {
-        setProjects(data as IProject[]);
+        setTasks(data as ITask[]);
         if (data !== null && data.length > 0) {
           setSelectedKeys(["list"]);
         } else {
           setSelectedKeys(["add"]);
         }
       } else {
-        setProjects([]);
+        setTasks([]);
         setSelectedKeys(["add"]);
       }
     });
-  }, [organizationId]);
+  }, [projectId]);
 
   return (
     <Layout>
@@ -42,7 +41,10 @@ const Organization = () => {
             <Breadcrumb.Item>
               <a href="/dashboard">Dashboard</a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>Organization</Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href={`/dashboard/${organizationId}`}>Organization</a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Tasks</Breadcrumb.Item>
           </Breadcrumb>
           <Content
             className="site-layout-background"
@@ -56,24 +58,18 @@ const Organization = () => {
             <Menu mode="horizontal" selectedKeys={selectedKeys}>
               <Menu.Item key="list" onClick={() => setSelectedKeys(["list"])}>
                 <UnorderedListOutlined />
-                My Projects
+                My Tasks
               </Menu.Item>
               <Menu.Item key="add" onClick={() => setSelectedKeys(["add"])}>
                 <PlusCircleOutlined />
-                Add Project
-              </Menu.Item>
-              <Menu.Item key="team" onClick={() => setSelectedKeys(["team"])}>
-                <PlusCircleOutlined />
-                Add Team Members
+                Add Task
               </Menu.Item>
             </Menu>
             {selectedKeys.includes("list") ? (
-              <ProjectList list={projects} />
-            ) : null}
-            {selectedKeys.includes("add") ? (
-              <AddProject organizationId={organizationId} />
-            ) : null}
-            {selectedKeys.includes("team") ? <AddUsers /> : null}
+              <TaskList /> //list={tasks}
+            ) : (
+              <AddTask organizationId={organizationId} projectId={projectId} />
+            )}
           </Content>
         </Layout>
       </Layout>
@@ -81,4 +77,4 @@ const Organization = () => {
   );
 };
 
-export default Organization;
+export default Tasks;
