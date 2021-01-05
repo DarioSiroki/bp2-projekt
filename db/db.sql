@@ -128,7 +128,6 @@ CREATE TABLE `korisnik` (
 
 LOCK TABLES `korisnik` WRITE;
 /*!40000 ALTER TABLE `korisnik` DISABLE KEYS */;
-INSERT INTO `korisnik` VALUES (1,'Dario','Široki','Daro','dario.siroki@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:48'),(2,'Damjan','Široki','Damo','damjan.siroki@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49'),(3,'Miroslav','Široki','Miro','miroslav.siroki@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49'),(4,'Luka','Lukic','Lukizijo','luka.lukizijo@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49'),(5,'Marko','Marković','Marek','marko.markovic@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49'),(6,'Darko','Darković','Darek','darko.darkovic@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49'),(7,'Barica','Barić','Bara','barica.baric@gmail.com','1234','https://i.imgur.com/Ko83g22.png','2021-01-02 20:20:49');
 /*!40000 ALTER TABLE `korisnik` ENABLE KEYS */;
 UNLOCK TABLES;
 

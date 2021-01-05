@@ -4,11 +4,10 @@ import ApiWrapper from "../ApiWrapper";
 import { useHistory } from "react-router-dom";
 
 const layout = {
+  labelCol: { span: 8 },
   wrapperCol: { span: 8 },
 };
-const tailLayout = {
-  wrapperCol: { span: 16 },
-};
+
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -38,8 +37,8 @@ const Login = () => {
       <Col span={4}></Col>
       <Col span={16}>
         <Layout>
-          <Content style={{ margin: "24px 16px 0" }}>
-            <Title> REGISTER </Title>
+          <Content style={{ margin: "24px 16px 0", textAlign: "center" }}>
+            <Title style={{}}> REGISTER </Title>
             <Form {...layout} name="basic" onFinish={onSubmit}>
               <Form.Item
                 label="Name"
@@ -88,7 +87,7 @@ const Login = () => {
                 <Input.Password />
               </Form.Item>
 
-              <Form.Item {...tailLayout}>
+              <Form.Item style={{placeContent: "center"}}>
                 <Button type="primary" htmlType="submit">
                   Submit
                 </Button>

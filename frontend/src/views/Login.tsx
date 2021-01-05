@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const layout = {
+  labelCol: { span: 8 },
   wrapperCol: { span: 8 },
 };
 const tailLayout = {
@@ -38,12 +39,11 @@ const Login = () => {
       <Col span={4}></Col>
       <Col span={16}>
         <Layout>
-          <Content style={{ margin: "24px 16px 0" }}>
+          <Content style={{ margin: "24px 16px 0", textAlign: "center" }}>
             <Title> LOGIN </Title>
             <Form
               {...layout}
               name="basic"
-              initialValues={{ remember: true }}
               onFinish={onSubmit}
             >
               <Form.Item
@@ -66,15 +66,7 @@ const Login = () => {
                 <Input.Password />
               </Form.Item>
 
-              <Form.Item
-                {...tailLayout}
-                name="remember"
-                valuePropName="checked"
-              >
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Form.Item {...tailLayout}>
+              <Form.Item style={{placeContent: "center"}}>
                 <Button type="primary" htmlType="submit">
                   Submit
                 </Button>
