@@ -39,3 +39,45 @@ ADD CONSTRAINT `komentar_zadatak_id`
 
 
 stavi cascade i na komentare
+
+INSERT INTO dopustenje(korisnik_id, organizacija_id, privilegija_id)
+VALUES(58, 1, 5)
+
+drop trigger IF EXISTS check_perms;
+DELIMITER $$
+CREATE TRIGGER check_perms
+BEFORE INSERT
+ON zadatak FOR EACH ROW
+BEGIN
+    DECLARE has_perm int;
+    SELECT EXISTS(
+		SELECT * 
+        FROM dopustenje d
+        JOIN privilegija p on d.privilegija_id=p.privilegija_id
+        WHERE d.korisnik_id=NEW.kreator_id AND (p.naziv='create_task' OR p.naziv='admin')
+	) INTO has_perm;
+
+	IF has_perm<1
+	THEN
+		SIGNAL SQLSTATE '02000' SET MESSAGE_TEXT = 'Missing sufficient permissions.';
+	END IF;
+END $$
+DELIMITER ;
+
+drop trigger IF EXISTS auto_add_admin;
+DELIMITER $$
+CREATE TRIGGER auto_add_admin
+AFTER INSERT
+ON organizacija FOR EACH ROW
+BEGIN
+	declare admin_permission_id int ;
+    
+    SELECT privilegija_id FROM privilegija WHERE naziv="admin" into admin_permission_id;
+    
+    INSERT INTO dopustenje(korisnik_id, privilegija_id, organizacija_id)
+    VALUES (NEW.kreator_id, admin_permission_id, NEW.organizacija_id);
+    
+    INSERT INTO pripada(korisnik_id, organizacija_id)
+    VALUES (NEW.kreator_id, NEW.organizacija_id);
+END $$
+DELIMITER ;

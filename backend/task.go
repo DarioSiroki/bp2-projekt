@@ -105,7 +105,13 @@ func create_task(c *gin.Context) {
 	z.KreatorId = user.(*Korisnik).KorisnikId
 	db := db_cursor()
 	stmt, err := db.Prepare("INSERT INTO zadatak(instrukcije, status_id, prioritet_id, kreator_id, projekt_id, organizacija_id) VALUES(?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		log.Panic(err)
+	}
 	res, err := stmt.Exec(z.Instrukcije, 1, z.PrioritetId, z.KreatorId, z.ProjektId, z.OrganizacijaId)
+	if err != nil {
+		log.Panic(err)
+	}
 	returnId, _ := res.LastInsertId()
 	if err != nil {
 		log.Panic(err)

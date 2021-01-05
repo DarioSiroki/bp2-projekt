@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
+
+	"github.com/gin-gonic/gin"
 )
 
 func create_organization(c *gin.Context) {
@@ -25,7 +26,11 @@ func get_organizations(c *gin.Context) {
 	user, _ := c.Get(identityKey)
 
 	db := db_cursor()
-	results, err := db.Query("SELECT * FROM organizacija WHERE kreator_id=?", user.(*Korisnik).KorisnikId)
+
+	results, err := db.Query("SELECT o.organizacija_id, o.naziv, o.slika_url, o.kreirano, o.kreator_id  "+
+		"FROM pripada p "+
+		"JOIN organizacija o on o.organizacija_id=p.organizacija_id "+
+		"WHERE p.korisnik_id=?", user.(*Korisnik).KorisnikId)
 	if err != nil {
 		panic(err.Error())
 	}

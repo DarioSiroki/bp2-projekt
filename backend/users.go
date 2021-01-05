@@ -71,6 +71,9 @@ func create_by_member(c *gin.Context) {
 	}
 	_, err = db.Query("INSERT INTO pripada(korisnik_id, organizacija_id) VALUES(?, ?)",
 		k_id, k.OrganizacijaId)
+	if err != nil {
+		fmt.Println(err)
+	}
 	c.JSON(200, k_id)
 }
 
