@@ -53,3 +53,22 @@ export interface IPermission {
   naziv: string;
   opis: string;
 }
+
+export interface IComment {
+  komentar_id: string;
+  tekst: string;
+  kreiran: string;
+  korisnik_id: string;
+  zadatak_id: string;
+}
+
+export interface IStatus {
+  status_id: string;
+  naziv: string;
+  opis: string;
+}
+
+export interface IPrioritet {
+  prioritet_id: string;
+  naziv: string;
+}

@@ -325,7 +325,7 @@ DROP TABLE IF EXISTS `zadatak`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `zadatak` (
   `zadatak_id` int NOT NULL AUTO_INCREMENT,
-  `instrukcije` varchar(45) NOT NULL,
+  `instrukcije` varchar(10000) NOT NULL,
   `kreirano` datetime DEFAULT CURRENT_TIMESTAMP,
   `azurirano` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status_id` int NOT NULL,

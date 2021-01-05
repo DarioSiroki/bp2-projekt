@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -76,6 +77,27 @@ func add_attachment(c *gin.Context) {
 	c.JSON(204, "")
 }
 
+func get_attachments(c *gin.Context) {
+	var p Privitak
+	c.BindJSON(&p)
+	db := db_cursor()
+	results, err := db.Query("SELECT privitak_id, naziv, putanja, zadatak_id FROM privitak WHERE zadatak_id=?", p.ZadatakId)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	privitci := Privitci{}
+	for results.Next() {
+		p := Privitak{}
+		err = results.Scan(&p.PrivitakId, &p.Naziv, &p.Putanja, &p.ZadatakId)
+		if err != nil {
+			panic(err.Error())
+		}
+		privitci.AddItem(p)
+	}
+	c.JSON(200, privitci.Items)
+}
+
 func create_task(c *gin.Context) {
 	user, _ := c.Get(identityKey)
 	var z Zadatak
@@ -94,25 +116,32 @@ func create_task(c *gin.Context) {
 }
 
 func get_tasks(c *gin.Context) {
+	user, _ := c.Get(identityKey)
 	var z Zadatak
 	c.BindJSON(&z)
-	c.JSON(200, nil)
-	// db := db_cursor()
-	// results, err := db.Query("SELECT projekt_id, naziv, opis, organizacija_id, kreator_id FROM projekt WHERE organizacija_id=?", z.OrganizacijaId)
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
+	db := db_cursor()
+	results, err := db.Query("SELECT z.zadatak_id, z.instrukcije, z.kreirano, z.azurirano, s.naziv, z.projekt_id, z.organizacija_id, k.nadimak, p.naziv "+
+		"FROM dodijeljen d "+
+		"JOIN zadatak z on z.zadatak_id=d.zadatak_id "+
+		"JOIN status s on s.status_id=z.status_id "+
+		"JOIN prioritet p on p.prioritet_id=z.prioritet_id "+
+		"JOIN korisnik k on z.kreator_id=k.korisnik_id "+
+		"WHERE (d.korisnik_id=? OR z.kreator_id=?) AND z.organizacija_id=? AND z.projekt_id=?;",
+		user.(*Korisnik).KorisnikId, user.(*Korisnik).KorisnikId, z.OrganizacijaId, z.ProjektId)
+	if err != nil {
+		panic(err.Error())
+	}
 
-	// zadaci := Zadaci{}
-	// for results.Next() {
-	// 	z := Zadatak{}
-	// 	err = results.Scan(&z.ProjektId)
-	// 	if err != nil {
-	// 		panic(err.Error())
-	// 	}
-	// 	zadaci.AddItem(z)
-	// }
-	// c.JSON(200, zadaci.Items)
+	zadaci := Zadaci{}
+	for results.Next() {
+		z := Zadatak{}
+		err = results.Scan(&z.ZadatakId, &z.Instrukcije, &z.Kreirano, &z.Azurirano, &z.StatusId, &z.ProjektId, &z.OrganizacijaId, &z.KreatorId, &z.PrioritetId)
+		if err != nil {
+			panic(err.Error())
+		}
+		zadaci.AddItem(z)
+	}
+	c.JSON(200, zadaci.Items)
 }
 
 func update_task(c *gin.Context) {
@@ -134,11 +163,37 @@ func delete_task(c *gin.Context) {
 	var z Zadatak
 	c.BindJSON(&z)
 	db := db_cursor()
-	_, err := db.Query("DELETE FROM zadatak WHERE projekt_id=?", z.ProjektId)
+	_, err := db.Query("DELETE FROM zadatak WHERE zadatak_id=?", z.ZadatakId)
 	if err != nil {
 		log.Panic(err)
 		c.JSON(500, "Internal server error")
 	} else {
 		c.JSON(200, z)
+	}
+}
+
+func change_status(c *gin.Context) {
+	z := Zadatak{}
+	c.BindJSON(&z)
+	db := db_cursor()
+	_, err := db.Query("UPDATE zadatak SET status_id=? WHERE zadatak_id=?", z.StatusId, z.ZadatakId)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(500, "")
+	} else {
+		c.JSON(204, "")
+	}
+}
+
+func set_priority(c *gin.Context) {
+	z := Zadatak{}
+	c.BindJSON(&z)
+	db := db_cursor()
+	_, err := db.Query("UPDATE zadatak SET prioritet_id=? WHERE zadatak_id=?", z.PrioritetId, z.ZadatakId)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(500, "")
+	} else {
+		c.JSON(204, "")
 	}
 }

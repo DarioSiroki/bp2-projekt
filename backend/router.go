@@ -131,9 +131,16 @@ func initRoutes(r *gin.Engine) {
 	r.POST("/tasks/update", authMiddleware.MiddlewareFunc(), update_task)
 	r.POST("/tasks/assign", authMiddleware.MiddlewareFunc(), assign_task)
 	r.POST("/tasks/addAttachment", authMiddleware.MiddlewareFunc(), add_attachment)
+	r.POST("/tasks/getAttachments", authMiddleware.MiddlewareFunc(), get_attachments)
+	r.POST("/tasks/getComments", authMiddleware.MiddlewareFunc(), get_comments)
+	r.POST("/tasks/addComment", authMiddleware.MiddlewareFunc(), create_comment)
 
 	r.GET("/statuses", authMiddleware.MiddlewareFunc(), get_statuses)
+	r.POST("/statuses/set", authMiddleware.MiddlewareFunc(), change_status)
+
 	r.GET("/priorities", authMiddleware.MiddlewareFunc(), get_priorities)
+	r.POST("/priorities/set", authMiddleware.MiddlewareFunc(), set_priority)
+
 	r.GET("/permissions", authMiddleware.MiddlewareFunc(), get_permissions)
 
 	r.NoRoute(authMiddleware.MiddlewareFunc(), func(c *gin.Context) {

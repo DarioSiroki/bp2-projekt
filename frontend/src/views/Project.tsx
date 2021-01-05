@@ -17,6 +17,7 @@ const Tasks = () => {
   useEffect(() => {
     ApiWrapper.post("tasks/list", {
       projekt_id: projectId,
+      organizacija_id: organizationId,
     }).then(({ data }) => {
       if (data !== null) {
         setTasks(data as ITask[]);
@@ -30,7 +31,7 @@ const Tasks = () => {
         setSelectedKeys(["add"]);
       }
     });
-  }, [projectId]);
+  }, []);
 
   return (
     <Layout>
@@ -66,7 +67,7 @@ const Tasks = () => {
               </Menu.Item>
             </Menu>
             {selectedKeys.includes("list") ? (
-              <TaskList /> //list={tasks}
+              <TaskList list={tasks} />
             ) : (
               <AddTask organizationId={organizationId} projectId={projectId} />
             )}

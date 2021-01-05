@@ -127,3 +127,19 @@ type Privitci struct {
 func (p *Privitci) AddItem(item Privitak) {
 	p.Items = append(p.Items, item)
 }
+
+type Komentar struct {
+	KomentarId string `json:"komentar_id"`
+	Tekst      string `json:"tekst"`
+	Kreiran    string `json:"kreiran"`
+	KorisnikId string `json:"korisnik_id"`
+	ZadatakId  string `json:"zadatak_id"`
+}
+
+type Komentari struct {
+	Items []Komentar
+}
+
+func (p *Komentari) AddItem(item Komentar) {
+	p.Items = append(p.Items, item)
+}

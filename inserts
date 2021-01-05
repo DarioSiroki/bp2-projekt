@@ -6,3 +6,36 @@ INSERT INTO task_manager.status (naziv, opis) VALUES ("U tijeku", "Zadatak je u 
 INSERT INTO task_manager.status (naziv, opis) VALUES ("Završen", "Zadatak je završen.");
 INSERT INTO task_manager.privilegija(naziv, opis) VALUES("admin", "Admin");
 INSERT INTO task_manager.privilegija(naziv, opis) VALUES("create_task", "Create tasks");
+
+ALTER TABLE `task_manager`.`dodijeljen` 
+DROP FOREIGN KEY `dodijeljen_korisnik_id`,
+DROP FOREIGN KEY `dodijeljen_zadatak_id`;
+ALTER TABLE `task_manager`.`dodijeljen` 
+ADD CONSTRAINT `dodijeljen_korisnik_id`
+  FOREIGN KEY (`korisnik_id`)
+  REFERENCES `task_manager`.`korisnik` (`korisnik_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+ADD CONSTRAINT `dodijeljen_zadatak_id`
+  FOREIGN KEY (`zadatak_id`)
+  REFERENCES `task_manager`.`zadatak` (`zadatak_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+ALTER TABLE `task_manager`.`komentar` 
+DROP FOREIGN KEY `komentar_korisnik_id`,
+DROP FOREIGN KEY `komentar_zadatak_id`;
+ALTER TABLE `task_manager`.`komentar` 
+ADD CONSTRAINT `komentar_korisnik_id`
+  FOREIGN KEY (`korisnik_id`)
+  REFERENCES `task_manager`.`korisnik` (`korisnik_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE,
+ADD CONSTRAINT `komentar_zadatak_id`
+  FOREIGN KEY (`zadatak_id`)
+  REFERENCES `task_manager`.`zadatak` (`zadatak_id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
+
+stavi cascade i na komentare
