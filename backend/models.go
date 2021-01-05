@@ -112,3 +112,18 @@ type Privilegije struct {
 func (p *Privilegije) AddItem(item Privilegija) {
 	p.Items = append(p.Items, item)
 }
+
+type Privitak struct {
+	PrivitakId string `json:"privitak_id"`
+	Naziv      string `json:"naziv"`
+	Putanja    string `json:"putanja"`
+	ZadatakId  string `json:"zadatak_id"`
+}
+
+type Privitci struct {
+	Items []Privitak
+}
+
+func (p *Privitci) AddItem(item Privitak) {
+	p.Items = append(p.Items, item)
+}

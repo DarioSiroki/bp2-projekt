@@ -78,7 +78,11 @@ func get_users(c *gin.Context) {
 	var k Korisnik
 	c.BindJSON(&k)
 	db := db_cursor()
-	results, err := db.Query("SELECT korisnik_id ime, prezime, nadimak, email, slika_url FROM korisnik WHERE organization_id=?")
+	results, err := db.Query(
+		"SELECT k.korisnik_id, ime, prezime, nadimak, email, slika_url "+
+			"FROM task_manager.pripada p "+
+			"JOIN task_manager.korisnik k on p.korisnik_id=k.korisnik_id "+
+			"WHERE p.organizacija_id=?;", k.OrganizacijaId)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -86,12 +90,13 @@ func get_users(c *gin.Context) {
 	korisnici := Korisnici{}
 	for results.Next() {
 		k := Korisnik{}
-		err = results.Scan(&k.Ime, &k.Email, &k.Lozinka)
+		err = results.Scan(&k.KorisnikId, &k.Ime, &k.Prezime, &k.Nadimak, &k.Email, &k.SlikaUrl)
 		if err != nil {
 			panic(err.Error())
 		}
+		fmt.Println(k.Ime)
 		korisnici.AddItem(k)
 	}
-	c.JSON(200, true)
+	c.JSON(200, korisnici.Items)
 
 }

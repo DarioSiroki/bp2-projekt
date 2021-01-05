@@ -244,8 +244,8 @@ DROP TABLE IF EXISTS `privitak`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `privitak` (
   `privitak_id` int NOT NULL AUTO_INCREMENT,
-  `naziv` varchar(45) NOT NULL,
-  `putanja` varchar(45) NOT NULL,
+  `naziv` varchar(100) NOT NULL,
+  `putanja` varchar(200) NOT NULL,
   `zadatak_id` int NOT NULL,
   PRIMARY KEY (`privitak_id`),
   KEY `privitak_zadatak_id_idx` (`zadatak_id`),

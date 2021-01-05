@@ -129,6 +129,8 @@ func initRoutes(r *gin.Engine) {
 	r.POST("/tasks/create", authMiddleware.MiddlewareFunc(), create_task)
 	r.POST("/tasks/delete", authMiddleware.MiddlewareFunc(), delete_task)
 	r.POST("/tasks/update", authMiddleware.MiddlewareFunc(), update_task)
+	r.POST("/tasks/assign", authMiddleware.MiddlewareFunc(), assign_task)
+	r.POST("/tasks/addAttachment", authMiddleware.MiddlewareFunc(), add_attachment)
 
 	r.GET("/statuses", authMiddleware.MiddlewareFunc(), get_statuses)
 	r.GET("/priorities", authMiddleware.MiddlewareFunc(), get_priorities)

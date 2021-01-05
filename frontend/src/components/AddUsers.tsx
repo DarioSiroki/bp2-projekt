@@ -37,11 +37,6 @@ const AddUser = () => {
       lozinka,
       organizacija_id: organizationId,
     });
-    await ApiWrapper.post("permissions/set", {
-      korisnik_id: data,
-      // @ts-ignore
-      dopustenja: permissions.map(permission.privilegija_id),
-    });
   };
 
   return (

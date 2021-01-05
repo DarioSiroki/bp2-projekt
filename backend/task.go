@@ -44,19 +44,52 @@ func get_priorities(c *gin.Context) {
 	c.JSON(200, prioriteti.Items)
 }
 
+type Assignees struct {
+	TaskId    int      `json:"taskId"`
+	Assignees []string `json:"selectedUsers"`
+}
+
+func assign_task(c *gin.Context) {
+	var assignees Assignees
+	c.BindJSON(&assignees)
+	db := db_cursor()
+	for _, a := range assignees.Assignees {
+		_, err := db.Query("INSERT INTO dodijeljen(korisnik_id, zadatak_id) VALUES(?, ?)", a, assignees.TaskId)
+		if err != nil {
+			c.JSON(500, "")
+			return
+		}
+	}
+	c.JSON(204, "")
+}
+
+func add_attachment(c *gin.Context) {
+	var p Privitak
+	c.BindJSON(&p)
+	db := db_cursor()
+	_, err := db.Query("INSERT INTO privitak(naziv, putanja, zadatak_id) VALUES(?, ?, ?)", p.Naziv, p.Putanja, p.ZadatakId)
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(500, "")
+		return
+	}
+	c.JSON(204, "")
+}
+
 func create_task(c *gin.Context) {
 	user, _ := c.Get(identityKey)
 	var z Zadatak
 	c.BindJSON(&z)
 	z.KreatorId = user.(*Korisnik).KorisnikId
 	db := db_cursor()
-	_, err := db.Query("INSERT INTO zadatak(instrukcije, status_id, prioritet_id, kreator_id) VALUES(?, ?, ?, ?)",
-		z.Instrukcije, z.StatusId, z.PrioritetId, z.KreatorId)
+	stmt, err := db.Prepare("INSERT INTO zadatak(instrukcije, status_id, prioritet_id, kreator_id, projekt_id, organizacija_id) VALUES(?, ?, ?, ?, ?, ?)")
+	res, err := stmt.Exec(z.Instrukcije, 1, z.PrioritetId, z.KreatorId, z.ProjektId, z.OrganizacijaId)
+	returnId, _ := res.LastInsertId()
 	if err != nil {
 		log.Panic(err)
 		c.JSON(500, "Internal server error")
 	} else {
-		c.JSON(200, z)
+		c.JSON(200, returnId)
 	}
 }
 
