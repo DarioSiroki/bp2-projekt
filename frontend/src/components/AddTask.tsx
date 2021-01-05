@@ -49,8 +49,8 @@ const AddTask = (props: Props) => {
     ApiWrapper.post("users/list", {
       organizacija_id: organizationId,
     }).then(({ data }) => {
-      console.log(data);
-      setUsers(data);
+      if (data!=null)
+        setUsers(data);
     });
   }, [organizationId]);
 
