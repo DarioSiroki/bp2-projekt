@@ -1,4 +1,4 @@
-Task management app.
+Task management app. Speedcoded in <24h with almost no Go knowledge.
 
 - Dockerized
 - Backend: Go
